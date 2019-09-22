@@ -1,0 +1,32 @@
+{
+"dimension":
+    19,
+"Hamiltonian":
+    [["-2*self.T1 - setup['excRate']", "(-1j)*np.conj(self.bxy)", "0", "1j*self.bxy", "self.T1", "0", "0", "0", "self.T1", "self.Leg", "0", "0", "0", "0", "0", "0", "0", "0", "self.Lst_p1"],
+    ["(-1j)*self.bxy", "1j*(self.bz + self.Dg) - 2*self.T1 - setup['excRate'] - self.T2", "(-1j)*np.conj(self.bxy)", "0", "1j*self.bxy", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+    ["0", "(-1j)*self.bxy", "(2*1j)*self.bz - 2*self.T1 - setup['excRate'] - self.T2", "0", "0", "1j*self.bxy", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+    ["1j*np.conj(self.bxy)", "0", "0", "1j*(-self.bz - self.Dg) - 2*self.T1 - setup['excRate'] - self.T2", "(-1j)*np.conj(self.bxy)", "0", "1j*self.bxy", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+    ["self.T1", "1j*np.conj(self.bxy)", "0", "(-1j)*self.bxy", "-2*self.T1 - setup['excRate']", "(-1j)*np.conj(self.bxy)", "0", "1j*self.bxy", "self.T1", "0", "0", "0", "0", "self.Leg", "0", "0", "0", "0", "self.Lst_0"],
+    ["0", "0", "1j*np.conj(self.bxy)", "0", "(-1j)*self.bxy", "1j*(self.bz - self.Dg) - 2*self.T1 - setup['excRate'] - self.T2", "0", "0", "1j*self.bxy", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+    ["0", "0", "0", "1j*np.conj(self.bxy)", "0", "0", "(-2*1j)*self.bz - 2*self.T1 - setup['excRate'] - self.T2", "(-1j)*np.conj(self.bxy)", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+    ["0", "0", "0", "0", "1j*np.conj(self.bxy)", "0", "(-1j)*self.bxy", "1j*(-self.bz + self.Dg) - 2*self.T1 - setup['excRate'] - self.T2", "(-1j)*np.conj(self.bxy)", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+    ["self.T1", "0", "0", "0", "self.T1", "1j*np.conj(self.bxy)", "0", "(-1j)*self.bxy", "-2*self.T1 - setup['excRate']", "0", "0", "0", "0", "0", "0", "0", "0", "self.Leg", "self.Lst_m1"],
+    ["setup['excRate']", "0", "0", "0", "0", "0", "0", "0", "0", "-self.Lts_p1 - self.Leg - 2*self.T1", "(-1j)*np.conj(self.bxy)", "0", "1j*self.bxy", "self.T1", "0", "0", "0", "self.T1", "0"],
+    ["0", "0", "0", "0", "0", "0", "0", "0", "0", "(-1j)*self.bxy", "1j*(self.bz + self.De) - self.Lts_p1/2 - self.Leg - 2*self.T1 - self.T2", "(-1j)*np.conj(self.bxy)", "0", "1j*self.bxy", "0", "0", "0", "0", "0"],
+    ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "(-1j)*self.bxy", "(2*1j)*self.bz - self.Lts_m1/2 - self.Lts_p1/2 - self.Leg - 2*self.T1 - self.T2", "0", "0", "1j*self.bxy", "0", "0", "0", "0"],
+    ["0", "0", "0", "0", "0", "0", "0", "0", "0", "1j*np.conj(self.bxy)", "0", "0", "1j*(-self.bz - self.De) - self.Lts_p1/2 - self.Leg - 2*self.T1 - self.T2", "(-1j)*np.conj(self.bxy)", "0", "1j*self.bxy", "0", "0", "0"],
+    ["0", "0", "0", "0", "setup['excRate']", "0", "0", "0", "0", "self.T1", "1j*np.conj(self.bxy)", "0", "(-1j)*self.bxy", "-self.Leg - 2*self.T1", "(-1j)*np.conj(self.bxy)", "0", "1j*self.bxy", "self.T1", "0"],
+    ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1j*np.conj(self.bxy)", "0", "(-1j)*self.bxy", "1j*(self.bz - self.De) - self.Lts_m1/2 - self.Leg - 2*self.T1 - self.T2", "0", "0", "1j*self.bxy", "0"],
+    ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1j*np.conj(self.bxy)", "0", "0", "(-2*1j)*self.bz - self.Lts_m1/2 - self.Lts_p1/2 - self.Leg - 2*self.T1 - self.T2", "(-1j)*np.conj(self.bxy)", "0", "0"],
+    ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1j*np.conj(self.bxy)", "0", "(-1j)*self.bxy", "1j*(-self.bz + self.De) - self.Lts_m1/2 - self.Leg - 2*self.T1 - self.T2", "(-1j)*np.conj(self.bxy)", "0"],
+    ["0", "0", "0", "0", "0", "0", "0", "0", "setup['excRate']", "self.T1", "0", "0", "0", "self.T1", "1j*np.conj(self.bxy)", "0", "(-1j)*self.bxy", "-self.Lts_m1 - self.Leg - 2*self.T1", "0"],
+    ["0", "0", "0", "0", "0", "0", "0", "0", "0", "self.Lts_p1", "0", "0", "0", "0", "0", "0", "0", "self.Lts_m1", "-self.Lst_0 - self.Lst_p1 - self.Lst_m1"]],
+"parameters":
+    ["excRate", "magnField", "magnVector"],
+"operators":
+    {"eigenstates": [1,0,0,0,1,0,0,0,1,1,0,0,0,1,0,0,0,1,1],
+     "emission": [0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0],
+     "bright": [0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+     "dark": [1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0],
+     "singlet": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]}
+}
