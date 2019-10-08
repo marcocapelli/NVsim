@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 
-from os import path as os_path
+import os
 import numpy as np
 from scipy.linalg import expm
 import scipy.constants as spConst
@@ -78,9 +78,10 @@ class SingleNV(object):
         return False
 
     def set_Hamiltonian(self, hamiltonian = 'default'):
-        dirname, filename = os_path.split(os_path.abspath(__file__))
-        # TODO: Rewrite to ALWAYS find the correct folder
-        filePath = dirname[:-5] + '/matrices/Hamiltonian_{}.json'.format(hamiltonian)
+        dirname, filename = os.path.split(os.path.abspath(__file__))
+        dirList = dirname.split(os.sep)
+        dirList[-1] = 'matrices'
+        filePath = os.sep.join(dirList) + os.sep + 'Hamiltonian_{}.json'.format(hamiltonian)
         with open(filePath) as file:
             json_dict = json.load(file)
             self.Hamiltonian = np.array(json_dict['Hamiltonian'])

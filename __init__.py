@@ -1,3 +1,3 @@
-import libs.setup as setup
-import libs.ensembleNV as ensemble
-import libs.singleNV as single
+from libs.setup import Setup
+from libs.ensembleNV import EnsembleNV
+from libs.singleNV import SingleNV

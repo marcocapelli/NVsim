@@ -2,7 +2,7 @@
 
 """
 This file contains the definition of the Setup class.
-   
+
 Copyright (C) 2019  Marco Capelli
 
 NVsim is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@ from .ensembleNV import EnsembleNV
 
 #Universal constants definition
 Constants = namedtuple('Constants', 'muB ge hbar pi c')
-const = Constants(muB = spConst.physical_constants['Bohr magneton'][0], 
+const = Constants(muB = spConst.physical_constants['Bohr magneton'][0],
                   ge = -spConst.physical_constants['electron g factor'][0],
                   pi = spConst.pi,
                   hbar = spConst.hbar,
@@ -39,15 +39,15 @@ const = Constants(muB = spConst.physical_constants['Bohr magneton'][0],
 # Iterable_dict support class
 ######################################################
 class Iterable_dict(object):
-    
+
     def __init__(self, **kwargs):
         self.single_values = {}
         self.changing_values = {}
         self.size = 1
         self.current_index = 0
-        
+
         self.update(**kwargs)
-        
+
     def update(self, **kwargs): # AND RESET!
         # Update the values saved in the object.
         for key, value in kwargs.items():
@@ -61,7 +61,7 @@ class Iterable_dict(object):
                 else:
                     self.changing_values.update({key: value})
                     self.single_values.update({key: value[0]})
-                        
+
             else:
                 if not np.size(value) > 1:
                     self.single_values.update({key: value})
@@ -70,7 +70,7 @@ class Iterable_dict(object):
                 else:
                     self.changing_values.update({key: value})
                     self.single_values.update({key: value[0]})
-                    
+
         # Check that all changing parameters have the same length.
         self.size = 1
         for key, value in self.changing_values.items():
@@ -79,16 +79,16 @@ class Iterable_dict(object):
                 raise ValueError('The parameter {} has a different dimention ({}) from the dimension of the experiment ({}).'.format(key, np.size(value), self.size))
             else:
                 self.size = changing_size
-                
+
         return self
-                
+
     def __str__(self):
         full_print = str(self.single_values) + '\nThe changing parameters are:\n' + str(self.changing_values) + '\n'
         return full_print
-                
+
     def __iter__(self):
         return self
-    
+
     def __next__(self):
         if self.current_index >= self.size:
             self.current_index = 0
@@ -98,7 +98,7 @@ class Iterable_dict(object):
                 self.single_values.update({key: value[self.current_index]}) # It works correcly with multi-dimensional magnVector
             self.current_index += 1
             return self.single_values
-        
+
     def __getitem__(self, index):
         if isinstance(index, str):
             if index in self.single_values.keys():
@@ -116,20 +116,20 @@ class Iterable_dict(object):
                 raise KeyError('{} is out of bound.'.format(index))
         else:
             raise KeyError('{} is not a valid key.'.format(index))
-        
+
     def __setitem__(self, index, value):
         if isinstance(index, str):
             self.update(**{index: value})
         else:
             raise KeyError('{} is not a valid key for assignment.'.format(index))
-            
+
 ######################################################
 # Setup class
-######################################################          
+######################################################
 class Setup(object):
-    
+
     def __init__(self, NV = None, **kwargs):
-        
+
         if not isinstance(NV, (SingleNV, EnsembleNV)):
             raise TypeError('A single (or ensemble) NV centre object is required to define a Setup.')
         # Set default parameters
@@ -139,7 +139,7 @@ class Setup(object):
                           'magnField': 0., 'magnVector': (0,0,1),
                           'freqMW': 2870., 'powerMW': 0.}
         self.update(**kwargs)
-        
+
     def __str__(self):
         detail_str = ''
         if self.excRate > 0:
@@ -154,13 +154,13 @@ class Setup(object):
         if detail_str == '':
             detail_str = 'Setup is off.'
         return detail_str
-    
+
     def __getattr__(self, name):
         if name in ['NV', 'excWavelength', 'NA', 'excArea', 'excPower', 'excRate', 'magnField', 'magnVector', 'freqMW', 'powerMW', 'collectionEff']:
-            return self.paramDict[name]            
-    
+            return self.paramDict[name]
+
     def update(self, **kwargs):
-        
+
         updateArea = True
         updateRate = True
         for name, value in kwargs.items():
@@ -182,42 +182,42 @@ class Setup(object):
                     self.paramDict['magnVector'] = np.array([0,0,1])
             else:
                 self.paramDict.update({name: value})
-            
+
         if updateArea:
             spot_diam = self.paramDict['excWavelength'] / (2*self.paramDict['NA'])
             self.paramDict['excArea'] = const.pi * (0.5*spot_diam)**2
         else:
             spot_diam = 2 * np.sqrt(self.paramDict['excArea'] / const.pi)
             self.paramDict['NA'] = self.paramDict['excWavelength'] / (2*spot_diam)
-            
+
         if updateRate:
             self.paramDict['excRate'] = self.watt2rate(self.paramDict['excPower'])
         else:
             self.paramDict['excPower'] = self.rate2watt(self.paramDict['excRate'])
-            
-        return self                    
-        
+
+        return self
+
     def new(self, **kwargs):
-        
+
         newDict = dict(self.paramDict)
         newDict.update({'excArea': None, 'excRate': None, 'NV': self.NV})
         for name, value in kwargs.items():
             newDict.update({name: value})
-            
+
         return Setup(**newDict)
-        
+
     def watt2rate(self, laserPower):
         NV_sigma = 0.95e-20 # NV absorption cross-section [m^2]
         laserPower = np.clip(laserPower, 0, 1) # Excitation power [W]
         return NV_sigma * (laserPower / self.excArea) * (self.excWavelength / (2*const.pi*const.hbar*const.c)) # Excitation rate [Hz]
-    
+
     def rate2watt(self, rate):
         NV_sigma = 0.95e-20 # NV absorption cross-section [m^2]
         return (rate * self.excArea) / (self.excWavelength / (2*const.pi*const.hbar*const.c)) / NV_sigma # Excitation rate [Hz]
-    
+
     def simulate_emission(self, operator = 'emission', returnStates = False, psf_correction = None, **kwargs):
         simulation_dict = Iterable_dict(**kwargs)
-        
+
         newSetup = self.new()
         emission_vector = np.zeros(simulation_dict.size)
         if newSetup.NV.is_ensemble():
@@ -243,30 +243,30 @@ class Setup(object):
             else:
                 # Update with the Setup with a single value from the array
                 emission_vector[idx], states_vector[idx] = newSetup.NV.static_solution(operator = operator, returnStates = 'eigenstates', **newSetup.paramDict)
-        
+
         emission_vector *= self.collectionEff
         if returnStates:
             return emission_vector, states_vector
         else:
             return emission_vector
-        
+
     def simulate_lifetime(self, time_array, **kwargs):
         onSetup = self.new(**kwargs)
         _, startState = onSetup.NV.static_solution(returnStates = 'full', **onSetup.paramDict)
         offSetup = self.new(**kwargs).update(excRate = 0.)
         emission = offSetup.NV.time_solution(time_array, startState = startState, operator = 'emission', **offSetup.paramDict)
-        
+
         emission *= self.collectionEff
         return emission
-    
+
     def simulate_ODMR(self, frequency_array, mw_power, **kwargs):
         newSetup = self.new(**kwargs)
         if isinstance(self.NV, EnsembleNV) or np.dot(newSetup.magnVector, newSetup.NV.NVaxis) < 0.9999: # Arbitrary misalignment threshold
-            print('WARNING! The simulation is based on the rotating frame approximation. The simultaneous presence of microwave and misalignment magnetic field breaks that approximation. The result may not be correct.')
+            print('WARNING! The ODMR simulation is based on the rotating frame approximation.\nThe simultaneous presence of microwave and misalignment magnetic field breaks that approximation.\nThe ODMR result may not be correct.')
         emission = newSetup.simulate_emission(freqMW = frequency_array, powerMW = mw_power, operator = 'emission', returnStates = False)
-        
+
         return emission
-    
+
     def simulate_T1(self, time_array, **kwargs):
         onSetup = self.new(**kwargs)
         offSetup = self.new(**kwargs).update(excRate = 0.)
@@ -280,27 +280,26 @@ class Setup(object):
             emission_trace_reference = self.NV.time_solution(timetrace_array_reference, startState = state_after_T1[1], returnStates = False, **onSetup.paramDict)
             # The coefficients are the DeltaT of the two timetraces. It is important to consider them for a correct integration under the timetrace curve.
             emission_vector[idx] = (2e-8*emission_trace_change.sum()) / (1e-7*emission_trace_reference.sum())
-        
+
         return emission_vector
-    
-    
+
+
 if __name__ == '__main__': #testing
-       
+
     import matplotlib.pyplot as plt
-    
+
     setupA = Setup(EnsembleNV(NVaxis = (1,1,1)), excArea = 0.574e-12, excPower = 100e-6)
     print(setupA)
     x_axis = np.linspace(0.1e-3, 400e-3, 200)
     emission = setupA.simulate_emission(excPower = 100e-6, magnField = x_axis, magnVector = (0,0,1))
     plt.plot(x_axis, emission / emission[0], 'b-')
-    
+
     t_axis = np.linspace(0.1e-9, 100e-9, 200)
     lifetime = setupA.simulate_lifetime(t_axis)
     plt.figure()
     plt.semilogy(t_axis, lifetime / lifetime[0], 'b-')
-    
+
     f_axis = np.linspace(2.4e9, 3.3e9, 200)
     odmr = setupA.simulate_ODMR(f_axis, mw_power = 1e6, magnField = 10e-3, magnVector = (0,0,1))
     plt.figure()
     plt.plot(f_axis, odmr / np.max(odmr), 'b-')
-    
