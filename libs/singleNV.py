@@ -2,7 +2,7 @@
 
 """
 This file contains the definition of the SingleNV class.
-   
+
 Copyright (C) 2019  Marco Capelli
 
 NVsim is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@ import json
 
 #Universal constants definition
 Constants = namedtuple('Constants', 'muB ge hbar pi c')
-const = Constants(muB = spConst.physical_constants['Bohr magneton'][0], 
+const = Constants(muB = spConst.physical_constants['Bohr magneton'][0],
                   ge = -spConst.physical_constants['electron g factor'][0],
                   pi = spConst.pi,
                   hbar = spConst.hbar,
@@ -48,11 +48,11 @@ class SingleNV(object):
     Lst_m1 = Lst_p1 # Transition rate between metastable singlet state and spin -1 ground triplet states [Hz]
     Lst_0 = Lst_p1 # Transition rate between metastable singlet state and spin 0 ground triplet state [Hz]
     sigma = 0.95e-20 # NV absorption cross-section [m^2]
-    
+
 #    focusArea = 5.655e-13 # Focal spot size (5x obj, 0.1NA) [m^2]
-    
+
     def __init__(self, NVaxis = (1,1,1), hamiltonian = 'default', T1 = 1/(1e-3), T2 = 0.0, **kwargs):
-        
+
         self._temp = {}
         self.function_params = {}
         if NVaxis is not None:
@@ -64,22 +64,23 @@ class SingleNV(object):
             else:
                 self.NVaxis = (1,1,1)
         self.set_Hamiltonian(hamiltonian = hamiltonian)
-        self.set_params(Leg = SingleNV.Leg, Lts_p1 = SingleNV.Lts_p1, Lts_m1 = SingleNV.Lts_m1, Lts_0 = SingleNV.Lts_0, 
-                        Lst_p1 = SingleNV.Lst_p1, Lst_m1 = SingleNV.Lst_m1, Lst_0 = SingleNV.Lst_0, 
+        self.set_params(Leg = SingleNV.Leg, Lts_p1 = SingleNV.Lts_p1, Lts_m1 = SingleNV.Lts_m1, Lts_0 = SingleNV.Lts_0,
+                        Lst_p1 = SingleNV.Lst_p1, Lst_m1 = SingleNV.Lst_m1, Lst_0 = SingleNV.Lst_0,
                         T1 = T1, T2 = T2, bz = 0., bxy = 0., **kwargs)
-        
+
         # Define functional dependency of certain parameters from Setup parameters. NB! All lambda function should include **kwargs!
         self.add_function2param('Dg', function = lambda nv, freqMW, default, **kwargs: default - freqMW, default = SingleNV.Dg, freqMW = 0.)
         self.add_function2param('De', function = lambda nv, freqMW, default, **kwargs: default - freqMW, default = SingleNV.De, freqMW = 0.)
         self.add_function2param('bz', function = lambda nv, magnField, magnVector, **kwargs: nv.gamma * magnField * np.dot(nv.NVaxis, magnVector))
         self.add_function2param('bxy', function = lambda nv, magnField, magnVector, powerMW, **kwargs: (nv.gamma / np.sqrt(2)) * magnField * (1 - np.dot(nv.NVaxis, magnVector)**2) + powerMW, powerMW = 0.) # add the np.sqrt
-    
+
     def is_ensemble(self):
         return False
-    
+
     def set_Hamiltonian(self, hamiltonian = 'default'):
         dirname, filename = os_path.split(os_path.abspath(__file__))
-        filePath = dirname + '/Hamiltonian_{}.json'.format(hamiltonian)
+        # TODO: Rewrite to ALWAYS find the correct folder
+        filePath = dirname[:-5] + '/matrices/Hamiltonian_{}.json'.format(hamiltonian)
         with open(filePath) as file:
             json_dict = json.load(file)
             self.Hamiltonian = np.array(json_dict['Hamiltonian'])
@@ -96,21 +97,21 @@ class SingleNV(object):
                     self.operators[key] = np.array(value)
             if self.eigenstates is None:
                 raise KeyError('The Hamiltonian loaded has no eigenstate vector defined.')
-            
+
     def eval_Hamiltonian(self, **setup):
         str_matrix = self.Hamiltonian.flatten()
         val_matrix = np.array(list(map(eval, str_matrix)))
         return val_matrix.reshape(self.Hamiltonian.shape)
-            
+
     def set_param(self, name, value, function = None, functionParamDict = None):
         self.__dict__.update({name: value})
         if function is not None:
             self.add_function2param(name, function, functionParamDict)
-    
+
     def set_params(self, **params):
         for key, value in params.items():
             self.set_param(key, value)
-            
+
     def add_function2param(self, paramName, function = None, reset = True, **functionParamDict):
         """ If function is None than remove the functional dependency from the parameter
         """
@@ -127,24 +128,24 @@ class SingleNV(object):
             else:
                 resetValue = 0
             self.function_params.update({paramName: (function, functionParamDict, resetValue)})
-            
+
     def update_function2param(self, paramName, **functionParamDict):
         self.function_params[paramName][1].update(functionParamDict)
-    
+
     def _update_changingParams(self, **kwargs):
         for key, values in self.function_params.items():
             values[1].update(kwargs)
             updatedValue = values[0](self, **values[1])
             self.__dict__.update({key: updatedValue})
-            
+
     def _nullspace(self, matrixA, eps = 1e-2):
-        # UV decomposition: A = U * diag(S) * V^H (^H is the complex conjugate). 
-        #                   S**2 is the vector of the eigenvalues, U and V are the matrices with the eigenvectors as row/columns     
-        u, s, vh = np.linalg.svd(matrixA) 
+        # UV decomposition: A = U * diag(S) * V^H (^H is the complex conjugate).
+        #                   S**2 is the vector of the eigenvalues, U and V are the matrices with the eigenvectors as row/columns
+        u, s, vh = np.linalg.svd(matrixA)
         null_mask = (s <= eps) # Find the eigenvalue 0. Return an array with 'False' in each element that does not respect the condition
         null_space = np.compress(null_mask, vh, axis = 0) # Select the row (axis=0) of V^H that correspond to the eigenvalue 0
         return np.squeeze(np.asarray(null_space))
-    
+
     def get_eigenstates(self, state):
         """ Get the populations of the eigenstates of the system given a flattened general density matrix (state parameter)
         """
@@ -158,13 +159,13 @@ class SingleNV(object):
         else:
             print('Not a valid state vector has been passed.')
             return state
-        
+
     def static_solution(self, operator = 'emission', returnStates = None, **kwargs):
         return self._common_solution(operator = operator, returnStates = returnStates, **kwargs)
-    
+
     def _time_solution(self, time, startState = None, operator = 'emission', returnStates = False, **kwargs):
         return self._common_solution(time = time, startState = startState, operator = operator, returnStates = returnStates, **kwargs)
-        
+
     def _common_solution(self, time = None, startState = None, operator = 'emission', returnStates = False, **kwargs):
         if not all(param in kwargs.keys() for param in self.external_params):
             raise ValueError('Impossible to evaluate the Hamiltonian. Some of the required paramaters are missing.')
@@ -191,7 +192,7 @@ class SingleNV(object):
             return emission, self.get_eigenstates(realState)
         else:
             return emission
-    
+
     def time_solution(self, time, startState = None, operator = 'emission', returnStates = False, **kwargs):
         if not isinstance(time, Iterable):
             time = [time]
@@ -212,14 +213,13 @@ class SingleNV(object):
             return emission, finalStates
         else:
             return emission
-        
+
 if __name__ == '__main__':
-    
+
     import matplotlib.pyplot as plt
-    
+
     testNV = SingleNV(T1 = 1/1e-3)
     t_axis = np.logspace(-6, -2.3, 100)
     _, startState = testNV.static_solution(excRate = 4.432e9, magnField = 0., magnVector = (0,0,1), returnStates = 'full')
     testEmission = testNV.time_solution(time = t_axis, startState = startState, operator = 'bright', excRate = 0., magnField = 0., magnVector = (0,0,1))
     plt.plot(t_axis, testEmission, 'b-')
-    
