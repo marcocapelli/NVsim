@@ -27,11 +27,11 @@ from libs.setup import Setup
 from libs.singleNV import SingleNV
 
 test_NV = SingleNV(NVaxis=(0, 0, 1), hamiltonian='nitrogen')
-setupA = Setup(test_NV, excPower=50e-6)
+setupA = Setup(test_NV, excPower=100e-6)
 print(setupA)
 
 t_axis = np.linspace(0.1e-9, 200e-9, 1000)
-timetrace = setupA.simulate_timetrace(t_axis, operator='emission', startState=[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0])
+timetrace = setupA.simulate_timetrace(t_axis)
 plt.figure()
 plt.plot(t_axis, timetrace, 'b-')
 
@@ -40,9 +40,9 @@ emission = setupA.simulate_emission(excPower=x_axis)
 plt.figure()
 plt.plot(x_axis, emission, 'b-')
 
-f_axis = np.linspace(2.4e9, 3.3e9, 200)
-odmr = setupA.simulate_ODMR(f_axis, mw_power=1e6)
-plt.figure()
-plt.plot(f_axis, odmr, 'b-')
+# f_axis = np.linspace(2.4e9, 3.3e9, 200)
+# odmr = setupA.simulate_ODMR(f_axis, mw_power=1e6)
+# plt.figure()
+# plt.plot(f_axis, odmr, 'b-')
 
 plt.show()
