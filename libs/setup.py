@@ -250,6 +250,16 @@ class Setup(object):
         else:
             return emission_vector
 
+    def simulate_timetrace(self, time_array, startState=None, operator='emission', **kwargs):
+        onSetup = self.new(**kwargs)
+        if startState is None:
+            offSetup = self.new(**kwargs).update(excRate=0.)
+            _, startState = offSetup.NV.static_solution(returnStates='full', **offSetup.paramDict)
+        emission = onSetup.NV.time_solution(time_array, startState=startState, operator=operator, **onSetup.paramDict)
+
+        emission *= self.collectionEff
+        return emission
+
     def simulate_lifetime(self, time_array, **kwargs):
         onSetup = self.new(**kwargs)
         _, startState = onSetup.NV.static_solution(returnStates = 'full', **onSetup.paramDict)
