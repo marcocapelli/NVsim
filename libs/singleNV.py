@@ -37,17 +37,23 @@ const = Constants(muB = spConst.physical_constants['Bohr magneton'][0],
 
 class SingleNV(object):
 
-    Dg = 2.87e9 # Ground state zero field splitting [Hz]
-    De = 1.4e9 # Excited state zero field splitting [Hz]
-    gamma = const.ge * const.muB / (2*const.pi*const.hbar) # NV electron giromagnetic ratio [Hz/T]
-    Leg = 1/(12e-9) # Excited state lifetime [Hz]
-    Lts_p1 = 1/(2*12e-9 + 0.9e-9) # Transition rate from spin +1 excited triplet states to metastable singlet state [Hz] (@ 0 mT)
-    Lts_m1 = Lts_p1 # Transition rate from spin -1 excited triplet states to metastable singlet state [Hz] (@ 0 mT)
-    Lts_0 = 0 # Transition rate from spin 0 excited triplet states to metastable singlet state [Hz] (@ 0 mT)
-    Lst_p1 = 1/(219e-9) # Transition rate between metastable singlet state and spin +1 ground triplet states [Hz]
-    Lst_m1 = Lst_p1 # Transition rate between metastable singlet state and spin -1 ground triplet states [Hz]
-    Lst_0 = Lst_p1 # Transition rate between metastable singlet state and spin 0 ground triplet state [Hz]
-    sigma = 0.95e-20 # NV absorption cross-section [m^2]
+    Dg = 2.87e9  # Ground state zero field splitting [Hz]
+    De = 1.4e9  # Excited state zero field splitting [Hz]
+    gamma = const.ge * const.muB / (2 * const.pi * const.hbar)  # NV electron giromagnetic ratio [Hz/T]
+    Leg = 1 / (12e-9)  # Excited state lifetime [Hz]
+    Lts_p1 = 1 / (2 * 12e-9 + 0.9e-9)  # Transition rate from spin +1 excited triplet states to metastable singlet state [Hz] (@ 0 mT)
+    Lts_m1 = Lts_p1  # Transition rate from spin -1 excited triplet states to metastable singlet state [Hz] (@ 0 mT)
+    Lts_0 = 0  # Transition rate from spin 0 excited triplet states to metastable singlet state [Hz] (@ 0 mT)
+    Lst_p1 = 1 / (219e-9)  # Transition rate between metastable singlet state and spin +1 ground triplet states [Hz]
+    Lst_m1 = Lst_p1  # Transition rate between metastable singlet state and spin -1 ground triplet states [Hz]
+    Lst_0 = Lst_p1  # Transition rate between metastable singlet state and spin 0 ground triplet state [Hz]
+    sigma = 0.95e-20  # NV absorption cross-section [m^2]
+    # Parameters for NV0-NV- interaction
+    Lzm_ex = 0  # Transition rate from the excited state of the NV0 to the ground state of the NV- [Hz]
+    Lzm_gr = 0  # Transition rate from the ground state of the NV0 to the ground state of the NV- [Hz]
+    Lmz_ex = 0  # Transition rate from the excited state of the NV- to the ground state of the NV0 [Hz]
+    Lmz_gr = 0  # Transition rate from the ground state of the NV- to the ground state of the NV0 [Hz]
+    Lz = 1 / (18e-9)  # NV0 lifetime (rate) [Hz]
 
 #    focusArea = 5.655e-13 # Focal spot size (5x obj, 0.1NA) [m^2]
 
