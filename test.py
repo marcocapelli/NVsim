@@ -24,23 +24,25 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from libs.setup import Setup
-from libs.ensembleNV import EnsembleNV
+from libs.singleNV import SingleNV
 
-setupA = Setup(EnsembleNV(NVaxis=(1, 1, 1)), excPower=100e-6)
+test_NV = SingleNV(NVaxis=(0, 0, 1), hamiltonian='nitrogen')
+setupA = Setup(test_NV, excPower=50e-6)
 print(setupA)
-x_axis = np.linspace(0.1e-3, 400e-3, 200)
-emission = setupA.simulate_emission(excPower=100e-6, magnField=x_axis,
-                                    magnVector=(1, 1, 1))
+
+t_axis = np.linspace(0.1e-9, 200e-9, 1000)
+timetrace = setupA.simulate_timetrace(t_axis, operator='emission', startState=[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0])
+plt.figure()
+plt.plot(t_axis, timetrace, 'b-')
+
+x_axis = np.linspace(0.2e-6, 1e-3, 500)
+emission = setupA.simulate_emission(excPower=x_axis)
+plt.figure()
 plt.plot(x_axis, emission, 'b-')
 
-t_axis = np.linspace(0.1e-9, 100e-9, 200)
-lifetime = setupA.simulate_lifetime(t_axis)
-plt.figure()
-plt.semilogy(t_axis, lifetime, 'b-')
-
 f_axis = np.linspace(2.4e9, 3.3e9, 200)
-odmr = setupA.simulate_ODMR(f_axis, mw_power=1e6, magnField=10e-3,
-                            magnVector=(1, 1, 1))
+odmr = setupA.simulate_ODMR(f_axis, mw_power=1e6)
 plt.figure()
 plt.plot(f_axis, odmr, 'b-')
+
 plt.show()

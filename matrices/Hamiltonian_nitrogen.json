@@ -2,26 +2,29 @@
 "dimension":
     19,
 "Hamiltonian":
-    [["-2*self.T1 - setup['excRate']", "(-1j)*np.conj(self.bxy)", "0", "1j*self.bxy", "self.T1", "0", "0", "0", "self.T1", "self.Leg", "0", "0", "self.Lst_p1", "self.Lzm_gr - self.Lmz_gr", "self.Lzm_ex"],
-    ["(-1j)*self.bxy", "1j*(self.bz + self.Dg) - 2*self.T1 - setup['excRate'] - self.T2", "(-1j)*np.conj(self.bxy)", "0", "1j*self.bxy", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
-    ["0", "(-1j)*self.bxy", "(2*1j)*self.bz - 2*self.T1 - setup['excRate'] - self.T2", "0", "0", "1j*self.bxy", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
-    ["1j*np.conj(self.bxy)", "0", "0", "1j*(-self.bz - self.Dg) - 2*self.T1 - setup['excRate'] - self.T2", "(-1j)*np.conj(self.bxy)", "0", "1j*self.bxy", "0", "0", "0", "0", "0", "0", "0", "0"],
-    ["self.T1", "1j*np.conj(self.bxy)", "0", "(-1j)*self.bxy", "-2*self.T1 - setup['excRate']", "(-1j)*np.conj(self.bxy)", "0", "1j*self.bxy", "self.T1", "0", "self.Leg", "0", "self.Lst_0", "self.Lzm_gr - self.Lmz_gr", "self.Lzm_ex"],
-    ["0", "0", "1j*np.conj(self.bxy)", "0", "(-1j)*self.bxy", "1j*(self.bz - self.Dg) - 2*self.T1 - setup['excRate'] - self.T2", "0", "0", "1j*self.bxy", "0", "0", "0", "0", "0", "0"],
-    ["0", "0", "0", "1j*np.conj(self.bxy)", "0", "0", "(-2*1j)*self.bz - 2*self.T1 - setup['excRate'] - self.T2", "(-1j)*np.conj(self.bxy)", "0", "0", "0", "0", "0", "0", "0"],
-    ["0", "0", "0", "0", "1j*np.conj(self.bxy)", "0", "(-1j)*self.bxy", "1j*(-self.bz + self.Dg) - 2*self.T1 - setup['excRate'] - self.T2", "(-1j)*np.conj(self.bxy)", "0", "0", "0", "0", "0", "0"],
-    ["self.T1", "0", "0", "0", "self.T1", "1j*np.conj(self.bxy)", "0", "(-1j)*self.bxy", "-2*self.T1 - setup['excRate']", "0", "0", "self.Leg", "self.Lst_m1", "self.Lzm_gr - self.Lmz_gr", "self.Lzm_ex"],
-    ["setup['excRate']", "0", "0", "0", "0", "0", "0", "0", "0", "-self.Lts_p1 - self.Leg - 2*self.T1", "self.T1", "self.T1", "0", "-self.Lzm_ex", "0"],
-    ["0", "0", "0", "0", "setup['excRate']", "0", "0", "0", "0", "self.T1", "-self.Leg - 2*self.T1", "self.T1", "0", "-self.Lzm_ex", "0"],
-    ["0", "0", "0", "0", "0", "0", "0", "0", "setup['excRate']", "self.T1", "self.T1", "-self.Lts_m1 - self.Leg - 2*self.T1", "0", "-self.Lzm_ex", "0"],
+    [["-2*self.T1 - setup['excRate'] - self.Lmz_gr", "(-1j)*np.conj(self.bxy)", "0", "1j*self.bxy", "self.T1", "0", "0", "0", "self.T1", "self.Leg", "0", "0", "self.Lst_p1", "self.Lzm_gr", "self.Lzm_ex"],
+    ["(-1j)*self.bxy", "1j*(self.bz + self.Dg) - 2*self.T1 - setup['excRate'] - self.Lmz_gr - self.T2", "(-1j)*np.conj(self.bxy)", "0", "1j*self.bxy", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+    ["0", "(-1j)*self.bxy", "(2*1j)*self.bz - 2*self.T1 - setup['excRate'] - self.Lmz_gr - self.T2", "0", "0", "1j*self.bxy", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+    ["1j*np.conj(self.bxy)", "0", "0", "1j*(-self.bz - self.Dg) - 2*self.T1 - setup['excRate'] - self.Lmz_gr - self.T2", "(-1j)*np.conj(self.bxy)", "0", "1j*self.bxy", "0", "0", "0", "0", "0", "0", "0", "0"],
+    ["self.T1", "1j*np.conj(self.bxy)", "0", "(-1j)*self.bxy", "-2*self.T1 - setup['excRate'] - self.Lmz_gr", "(-1j)*np.conj(self.bxy)", "0", "1j*self.bxy", "self.T1", "0", "self.Leg", "0", "self.Lst_0", "self.Lzm_gr", "self.Lzm_ex"],
+    ["0", "0", "1j*np.conj(self.bxy)", "0", "(-1j)*self.bxy", "1j*(self.bz - self.Dg) - 2*self.T1 - setup['excRate'] - self.Lmz_gr - self.T2", "0", "0", "1j*self.bxy", "0", "0", "0", "0", "0", "0"],
+    ["0", "0", "0", "1j*np.conj(self.bxy)", "0", "0", "(-2*1j)*self.bz - 2*self.T1 - setup['excRate'] - self.Lmz_gr - self.T2", "(-1j)*np.conj(self.bxy)", "0", "0", "0", "0", "0", "0", "0"],
+    ["0", "0", "0", "0", "1j*np.conj(self.bxy)", "0", "(-1j)*self.bxy", "1j*(-self.bz + self.Dg) - 2*self.T1 - setup['excRate'] - self.Lmz_gr - self.T2", "(-1j)*np.conj(self.bxy)", "0", "0", "0", "0", "0", "0"],
+    ["self.T1", "0", "0", "0", "self.T1", "1j*np.conj(self.bxy)", "0", "(-1j)*self.bxy", "-2*self.T1 - setup['excRate'] - self.Lmz_gr", "0", "0", "self.Leg", "self.Lst_m1", "self.Lzm_gr", "self.Lzm_ex"],
+
+    ["setup['excRate']", "0", "0", "0", "0", "0", "0", "0", "0", "-self.Lts_p1 - self.Leg - 2*self.T1 - self.Lmz_ex", "self.T1", "self.T1", "0", "0", "0"],
+    ["0", "0", "0", "0", "setup['excRate']", "0", "0", "0", "0", "self.T1", "-self.Leg - 2*self.T1 - self.Lmz_ex", "self.T1", "0", "0", "0"],
+    ["0", "0", "0", "0", "0", "0", "0", "0", "setup['excRate']", "self.T1", "self.T1", "-self.Lts_m1 - self.Leg - 2*self.T1 - self.Lmz_ex", "0", "0", "0"],
+
     ["0", "0", "0", "0", "0", "0", "0", "0", "0", "self.Lts_p1", "0", "self.Lts_m1", "-self.Lst_0 - self.Lst_p1 - self.Lst_m1", "0", "0"],
-    ["self.Lmz_gr - self.Lzm_gr", "0", "0", "0", "self.Lmz_gr - self.Lzm_gr", "0", "0", "0", "self.Lmz_gr - self.Lzm_gr", "self.Lmz_ex", "self.Lmz_ex", "self.Lmz_ex", "0", "-setup['excRate']", "self.Lz"],
-    ["-self.Lzm_ex", "0", "0", "0", "-self.Lzm_ex", "0", "0", "0", "-self.Lzm_ex", "0", "0", "0", "0", "setup['excRate']", "-self.Lz"]],
+
+    ["self.Lmz_gr", "0", "0", "0", "self.Lmz_gr", "0", "0", "0", "self.Lmz_gr", "self.Lmz_ex", "self.Lmz_ex", "self.Lmz_ex", "0", "-setup['excRate'] - 3*self.Lzm_gr", "self.Lz"],
+    ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "setup['excRate']", "-self.Lz - 3*self.Lzm_ex"]],
 "parameters":
     ["excRate", "magnField", "magnVector", "excWavelength"],
 "operators":
     {"eigenstates": [1,0,0,0,1,0,0,0,1,1,1,1,1,1,1],
      "emission":    [0,0,0,0,0,0,0,0,0,1,1,1,0,0,1],
-     "NVm":         [0,0,0,0,0,0,0,0,0,1,1,1,0,0,0],
-     "NVz":         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]}
+     "NVm":         [1,0,0,0,1,0,0,0,1,1,1,1,0,0,0],
+     "NVz":         [0,0,0,0,0,0,0,0,0,0,0,0,0,1,1]}
 }

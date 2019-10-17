@@ -49,8 +49,8 @@ class SingleNV(object):
     Lst_0 = Lst_p1  # Transition rate between metastable singlet state and spin 0 ground triplet state [Hz]
     sigma = 0.95e-20  # NV absorption cross-section [m^2]
     # Parameters for NV0-NV- interaction
-    Lzm_ex = 0  # Transition rate from the excited state of the NV0 to the ground state of the NV- [Hz]
-    Lzm_gr = 0  # Transition rate from the ground state of the NV0 to the ground state of the NV- [Hz]
+    Lzm_ex = 1e6  # Transition rate from the excited state of the NV0 to the ground state of the NV- [Hz]
+    Lzm_gr = 1e7  # Transition rate from the ground state of the NV0 to the ground state of the NV- [Hz]
     Lmz_ex = 0  # Transition rate from the excited state of the NV- to the ground state of the NV0 [Hz]
     Lmz_gr = 0  # Transition rate from the ground state of the NV- to the ground state of the NV0 [Hz]
     Lz = 1 / (18e-9)  # NV0 lifetime (rate) [Hz]
@@ -149,8 +149,10 @@ class SingleNV(object):
         # UV decomposition: A = U * diag(S) * V^H (^H is the complex conjugate).
         #                   S**2 is the vector of the eigenvalues, U and V are the matrices with the eigenvectors as row/columns
         u, s, vh = np.linalg.svd(matrixA)
-        null_mask = (s <= eps) # Find the eigenvalue 0. Return an array with 'False' in each element that does not respect the condition
-        null_space = np.compress(null_mask, vh, axis = 0) # Select the row (axis=0) of V^H that correspond to the eigenvalue 0
+        null_mask = (s <= eps)  # Find the eigenvalue 0. Return an array with 'False' in each element that does not respect the condition
+        null_space = np.compress(null_mask, vh, axis = 0)  # Select the row (axis=0) of V^H that correspond to the eigenvalue 0
+        if np.shape(null_space)[0] != 1:
+            raise RuntimeError('The system does not have an unique solution.')
         return np.squeeze(np.asarray(null_space))
 
     def get_eigenstates(self, state):
